@@ -10,28 +10,25 @@ import (
 var lastResult float64
 
 type funcType = func(int) float64
-type decType = func(funcType, int) funcType
+type decType = func(funcType) funcType
 
 func main() {
 	decorators := []decType{stopTime, saveResult}
 
-	a := 10
-	decorate(tools.Pi, a, decorators...)(a)
-	a = 10000
-	decorate(tools.Pi, a, decorators...)(a)
-	a = 1000000
-	decorate(tools.Pi, a, decorators...)(a)
+	decorate(tools.Pi, decorators...)(10)
+	decorate(tools.Pi, decorators...)(10000)
+	decorate(tools.Pi, decorators...)(1000000)
 }
 
-func decorate(f funcType, n int, ds ...decType) funcType {
+func decorate(f funcType, ds ...decType) funcType {
 	fct := f
 	for _, d := range ds {
-		fct = d(fct, n)
+		fct = d(fct)
 	}
 	return fct
 }
 
-func stopTime(a funcType, n int) funcType {
+func stopTime(a funcType) funcType {
 	return func(n int) float64 {
 		s := time.Now()
 		r := a(n)
@@ -42,7 +39,7 @@ func stopTime(a funcType, n int) funcType {
 	}
 }
 
-func saveResult(a funcType, n int) funcType {
+func saveResult(a funcType) funcType {
 	return func(n int) float64 {
 		r := a(n)
 		lastResult = r

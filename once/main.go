@@ -16,15 +16,15 @@ func main() {
 
 func calc(n int) int {
 	if n%3 == 0 {
-		return initialize(n)
+		return initialize(n, 9)
 	}
 	return n
 }
 
-func initialize(n int) int {
+func initialize(n int, p int) int {
 	doOnce.Do(func() {
 		fmt.Printf("Initialize (%v)", n)
-		for i := 0; i < 10; i++ {
+		for i := 0; i < p; i++ {
 			time.Sleep(1 * time.Second)
 			fmt.Print(".")
 		}

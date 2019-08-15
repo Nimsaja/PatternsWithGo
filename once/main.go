@@ -9,32 +9,26 @@ import (
 var doOnce sync.Once
 
 func main() {
-	pts := 7
-
 	for i := 1; i < 20; i++ {
-		fmt.Printf("Calculation with %v is %v\n", i, calc(i, pts))
+		fmt.Printf("Calculation with %v is %v\n", i, calc(i))
 	}
 }
 
-func calc(n int, pts int) int {
+func calc(n int) int {
 	if n%3 == 0 {
-		return initialize(n, pts)
+		return initialize(n)
 	}
 	return n
 }
 
-func initialize(n int, pts int) int {
-	initFct := func(p int) {
+func initialize(n int) int {
+	doOnce.Do(func() {
 		fmt.Printf("Initialize (%v)", n)
-		for i := 0; i < p; i++ {
+		for i := 0; i < 10; i++ {
 			time.Sleep(1 * time.Second)
 			fmt.Print(".")
 		}
 		fmt.Println()
-	}
-
-	doOnce.Do(func() {
-		initFct(pts)
 	})
 	fmt.Printf("done (%v)\n", n)
 

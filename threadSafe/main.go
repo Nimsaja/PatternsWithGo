@@ -7,34 +7,44 @@ import (
 )
 
 type Number struct {
-	sync.Mutex
+	sync.RWMutex
 	n int
 }
 
 var nb = new(Number)
 
 func main() {
-	fmt.Println("0 -> ", nb.n)
-
-	go increase()
-	fmt.Println("1 -> ", nb.n)
-	go increase()
-	fmt.Println("2 -> ", nb.n)
-	go increase()
-	fmt.Println("3 -> ", nb.n)
-	go increase()
-	fmt.Println("4 -> ", nb.n)
-	go increase()
-	fmt.Println("5 -> ", nb.n)
+	go safeIncrease()
+	printOut("1")
+	go safeIncrease()
+	printOut("2")
+	go safeIncrease()
+	printOut("3")
+	go safeIncrease()
+	printOut("4")
+	go safeIncrease()
+	printOut("5")
 
 	time.Sleep(time.Second * 1)
 
-	fmt.Println("FIN -> ", nb.n)
+	printOut("FIN")
 }
 
-func increase() {
-	fmt.Println("increase ", nb.n)
-	nb.n++
+func safeIncrease() {
+	nb.Lock()
+	defer nb.Unlock()
+	nb.increase()
+}
+
+func printOut(s string) {
+	nb.Lock()
+	defer nb.Unlock()
+	fmt.Printf("%v -> %v\n", s, nb.n)
+}
+
+func (number *Number) increase() {
+	fmt.Println("increase ", number.n)
+	number.n++
 	time.Sleep(time.Second * 1)
-	fmt.Println("increase done ", nb.n)
+	fmt.Println("increase done ", number.n)
 }

@@ -70,14 +70,13 @@ func (number *Number) increase() {
 }
 
 func increaseAtomic() {
-	nn := atomic.LoadInt32(&nbAtomic)
-	fmt.Println("increase ", nn)
+	fmt.Println("increase ", atomic.LoadInt32(&nbAtomic))
 
-	nn++
-	atomic.StoreInt32(&nbAtomic, nn)
+	atomic.AddInt32(&nbAtomic, 1)
+
 	time.Sleep(time.Second * 1)
 
-	fmt.Println("increase done ", nn)
+	fmt.Println("increase done ", atomic.LoadInt32(&nbAtomic))
 }
 
 func printOutAtomic(s string) {

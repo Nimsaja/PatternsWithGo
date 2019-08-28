@@ -8,6 +8,8 @@ func main() {
 	// test
 	fmt.Println("even array: ", convert(a, evenFilter))
 	fmt.Println("uneven array: ", convert(a, unevenFilter))
+	fmt.Println("greater than 5 array: ", convert(a, greaterThanFilter(5)))
+	fmt.Println("lower than 3 array: ", convert(a, lowerThanFilter(3)))
 }
 
 type filter func(int) bool
@@ -24,3 +26,15 @@ func convert(a []int, f filter) (l []int) {
 func evenFilter(n int) bool { return n%2 == 0 }
 
 func unevenFilter(n int) bool { return n%2 != 0 }
+
+func greaterThanFilter(f int) filter {
+	return func(n int) bool {
+		return n > f
+	}
+}
+
+func lowerThanFilter(f int) filter {
+	return func(n int) bool {
+		return n < f
+	}
+}

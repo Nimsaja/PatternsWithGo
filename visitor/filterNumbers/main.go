@@ -10,6 +10,10 @@ func main() {
 	fmt.Println("uneven array: ", convert(a, unevenFilter))
 	fmt.Println("greater than 5 array: ", convert(a, greaterThanFilter(5)))
 	fmt.Println("lower than 3 array: ", convert(a, lowerThanFilter(3)))
+
+	// ****
+	fmt.Println("even array and greater than 5: ", convert(a, combinedFilter(evenFilter, greaterThanFilter(5))))
+	fmt.Println("uneven array and lower than 5: ", convert(a, combinedFilter(unevenFilter, lowerThanFilter(5))))
 }
 
 type filter func(int) bool
@@ -36,5 +40,11 @@ func greaterThanFilter(f int) filter {
 func lowerThanFilter(f int) filter {
 	return func(n int) bool {
 		return n < f
+	}
+}
+
+func combinedFilter(f1 filter, f2 filter) filter {
+	return func(n int) bool {
+		return f1(n) && f2(n)
 	}
 }

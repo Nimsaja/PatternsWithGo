@@ -9,9 +9,9 @@ import (
 func main() {
 	c := make(chan int, 4)
 
-	for i := 0; i < 10; i++ {
+	for i := 0; i < 100; i++ {
+		c <- i
 		go func(j int) {
-			c <- j
 			fmt.Printf("start with %v\n", j)
 			doSomething(j)
 			fmt.Printf("done with %v\n", <-c)

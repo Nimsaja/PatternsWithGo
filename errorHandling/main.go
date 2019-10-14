@@ -5,7 +5,7 @@ import "fmt"
 type isZeroError struct {
 }
 
-func (e *isZeroError) Error() string {
+func (e isZeroError) Error() string {
 	return fmt.Sprintf("Error: is zero")
 }
 
@@ -13,7 +13,7 @@ type isTooBigError struct {
 	arg int
 }
 
-func (e *isTooBigError) Error() string {
+func (e isTooBigError) Error() string {
 	return fmt.Sprintf("Error: is too big: %v", e.arg)
 }
 
@@ -21,7 +21,7 @@ type isTooLowError struct {
 	arg int
 }
 
-func (e *isTooLowError) Error() string {
+func (e isTooLowError) Error() string {
 	return fmt.Sprintf("Error: is too low: %v", e.arg)
 }
 
@@ -42,11 +42,11 @@ func main() {
 func doSomething(i int) error {
 	switch {
 	case i == 0:
-		return &isZeroError{}
+		return isZeroError{}
 	case i > 0:
-		return &isTooBigError{i}
+		return isTooBigError{i}
 	case i < 0:
-		return &isTooLowError{i}
+		return isTooLowError{i}
 	default:
 		return nil
 	}
@@ -54,11 +54,11 @@ func doSomething(i int) error {
 
 func handleError(err error) {
 	switch err.(type) {
-	case *isZeroError:
+	case isZeroError:
 		fmt.Printf("%v. Please choose a number !=0 !\n", err)
-	case *isTooBigError:
+	case isTooBigError:
 		fmt.Printf("%v. Please choose a number <= 0!\n", err)
-	case *isTooLowError:
+	case isTooLowError:
 		fmt.Printf("%v. Please choose a number >= 0!\n", err)
 	default:
 		fmt.Printf("Error: %v\n", err)
